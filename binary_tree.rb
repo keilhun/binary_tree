@@ -37,6 +37,13 @@ class Node
   end
 end
 
+class BinaryTree
+
+  def initialize()
+    @tree = []
+    @root = nil
+  end
+
   def set_node(root,val)
     pointer = root
     if (val < pointer.value)
@@ -61,19 +68,18 @@ end
 
   def build_tree(values)
     values = values.shuffle
-    root = nil
     values.each_with_index do |value,index|
       if index == 0
-          root = Node.new(value)
+          @root = Node.new(value)
       else
-       set_node(root,value)
+       set_node(@root,value)
       end
     end
-    return root
+    return @root
   end
 
-  def print_tree(root)
-    pointer = root
+  def print_tree()
+    pointer = @root
     node_queue = Queue.new
     print "#{pointer.value}   "
     #pointer.left != nil ? print pointer.left.value : print pointer.left
@@ -117,10 +123,10 @@ end
     end
   end
 
-  def breadth_first_search(root, val)
+  def breadth_first_search(val)
     node_queue = Queue.new
-    return root if val == root.value
-    pointer = root
+    return @root if val == @root.value
+    pointer = @root
     node_queue.enqueue(pointer.left) if pointer.left != nil
     node_queue.enqueue(pointer.right) if pointer.right != nil
 
@@ -133,13 +139,13 @@ end
     return nil
   end
 
-  def depth_first_search(root, val)
+  def depth_first_search(val)
     node_stack = []
-    return root if root.value == val
-    if (root.left != nil && val < root.value)
-      node_stack.push (root.left)
-    elsif (root.right != nil && val > root.value)
-      node_stack.push (root.right)
+    return @root if @root.value == val
+    if (@root.left != nil && val < @root.value)
+      node_stack.push (@root.left)
+    elsif (@root.right != nil && val > @root.value)
+      node_stack.push (@root.right)
     end
     while !node_stack.empty?
       pointer = node_stack.pop()
@@ -159,18 +165,20 @@ end
     dfs_rec(root.left,val) if (root.left != nil && val < root.value)
     dfs_rec(root.right,val) if (root.right != nil && val > root.value)
   end
+end
 
 values = [1,2,3,4,5,6,7,8,9,10]
-tree = build_tree(values)
-print_tree(tree)
+tree = BinaryTree.new()
+tree.build_tree(values)
+tree.print_tree()
 
-node = breadth_first_search(tree,15)
+node = tree.breadth_first_search(15)
 #puts "search result = #{node.value}" if node != nil else print nil
 
 node != nil ? (puts "search value: #{node.value}") : (puts "search value: nil")
 
-node2 = depth_first_search(tree,6)
+node2 = tree.depth_first_search(6)
 node2 != nil ? (puts "search value: #{node2.value}") : (puts "search value: nil")
 
-node3 = dfs_rec(tree,8)
-node3 != nil ? (puts "recursive search value: #{node3.value}") : (puts "recursive search value: nil")
+#node3 = dfs_rec(tree,8)
+#node3 != nil ? (puts "recursive search value: #{node3.value}") : (puts "recursive search value: nil")
